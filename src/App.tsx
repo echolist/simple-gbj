@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList, Cell } from 'recharts';
-import { Activity } from 'lucide-react';
+import { Activity, Download } from 'lucide-react';
 
 interface Inputs {
   a: string;
@@ -32,6 +32,7 @@ export default function App() {
 
   const [data, setData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const formatNumber = (num: number) => {
     return isNaN(num) || !isFinite(num) ? "0.00" : num.toFixed(2);
@@ -43,13 +44,13 @@ export default function App() {
   };
 
   const generateGraph = () => {
-    const a = parseFloat(inputs.a) || 0;
-    const b = parseFloat(inputs.b) || 0;
-    const c = parseFloat(inputs.c) || 0;
-    const d = parseFloat(inputs.d) || 0;
-    const e = parseFloat(inputs.e) || 0;
-    const f = parseFloat(inputs.f) || 0;
-    const g = parseFloat(inputs.g) || 0;
+    const a = parseFloat(inputs.a) || 0; // Jumlah Tempat Tidur
+    const b = parseFloat(inputs.b) || 0; // Pasien Keluar Hidup
+    const c = parseFloat(inputs.c) || 0; // Pasien Keluar Mati < 48 Jam
+    const d = parseFloat(inputs.d) || 0; // Pasien Keluar Mati > 48 Jam
+    const e = parseFloat(inputs.e) || 0; // Jumlah Hari Perawatan
+    const f = parseFloat(inputs.f) || 0; // Lama Dirawat
+    const g = parseFloat(inputs.g) || 0; // Hari Perawatan (Periode)
 
     const totalKeluar = b + c + d;
 
@@ -94,6 +95,41 @@ export default function App() {
     ];
 
     setData(chartData);
+  };
+
+  const downloadGraph = () => {
+    if (!chartRef.current) return;
+    const svgElement = chartRef.current.querySelector('svg');
+    if (!svgElement) return;
+
+    const svgData = new XMLSerializer().serializeToString(svgElement);
+    const canvas = document.createElement("canvas");
+    
+    // Scale up for higher resolution (retina display quality)
+    const scale = 2;
+    canvas.width = (svgElement.clientWidth || 800) * scale;
+    canvas.height = (svgElement.clientHeight || 600) * scale;
+    
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    
+    ctx.scale(scale, scale);
+    
+    const img = new Image();
+    img.onload = () => {
+      // Draw solid background color matching the container
+      ctx.fillStyle = "#f8fafc"; // Tailwind slate-50
+      ctx.fillRect(0, 0, canvas.width / scale, canvas.height / scale);
+      ctx.drawImage(img, 0, 0);
+      
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = "Grafik_Barber_Johnson.png";
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    // Safe encoding of svg data
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const getBorLineData = (percent: number) => {
@@ -171,7 +207,7 @@ export default function App() {
                 { id: 'd', label: 'd. Pasien Keluar Mati > 48 Jam', placeholder: 'Ex: 10' },
                 { id: 'e', label: 'e. Jumlah Hari Perawatan', placeholder: 'Ex: 1800' },
                 { id: 'f', label: 'f. Lama Dirawat', placeholder: 'Ex: 2100' },
-                { id: 'g', label: 'g. Hari Perawatan (Periode)', placeholder: 'Ex: 30' }
+                { id: 'g', label: 'g. Periode', placeholder: 'Ex: 30' }
               ].map((field) => (
                 <div key={field.id} className="flex flex-col gap-1.5">
                   <label htmlFor={field.id} className="text-xs font-bold text-slate-600 uppercase tracking-wide">
@@ -225,14 +261,22 @@ export default function App() {
 
         <div className="lg:col-span-8">
           <div className="bg-white rounded-3xl shadow-md border border-slate-200 p-8 h-full min-h-[600px] flex flex-col">
-            <h2 className="text-xl font-black text-slate-900 mb-8 flex items-center justify-between uppercase tracking-tight">
+            <h2 className="text-xl font-black text-slate-900 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between uppercase tracking-tight gap-4">
               <span>Visualisasi Barber Johnson</span>
               <div className="flex gap-2">
-                <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 uppercase">Scale 0-15</span>
+                <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 uppercase flex items-center justify-center">Scale 0-15</span>
+                {data.length > 0 && (
+                  <button 
+                    onClick={downloadGraph}
+                    className="flex items-center gap-1.5 text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-full shadow-md transition-all active:scale-95 uppercase"
+                  >
+                    <Download className="w-3.5 h-3.5" /> Download
+                  </button>
+                )}
               </div>
             </h2>
 
-            <div className="flex-1 bg-slate-50 rounded-2xl border border-slate-100 p-6 relative">
+            <div ref={chartRef} className="flex-1 bg-slate-50 rounded-2xl border border-slate-100 p-6 relative">
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
