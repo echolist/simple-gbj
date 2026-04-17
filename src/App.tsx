@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList, Cell, ReferenceLine } from 'recharts';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList, Cell } from 'recharts';
 import { Activity } from 'lucide-react';
 
 interface Inputs {
@@ -70,8 +70,8 @@ export default function App() {
       {
         INDIKATOR: "BOR",
         NILAI: formatNumber(bor),
-        X: (15 - (bor/100 * 15)) || 0, // Adjusted for scale visibility
-        Y: (bor/100 * 15) || 0,
+        X: (15 - (bor / 100 * 15)) || 0, // Adjusted for scale visibility
+        Y: (bor / 100 * 15) || 0,
       },
       {
         INDIKATOR: "BTO",
@@ -131,7 +131,7 @@ export default function App() {
     const startX = intercept - startY;
     const endX = Math.min(15, intercept);
     const endY = intercept - endX;
-    
+
     return [
       { X: startX, Y: startY },
       { X: endX, Y: endY },
@@ -162,7 +162,7 @@ export default function App() {
         <div className="lg:col-span-4 flex flex-col gap-6">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <h2 className="text-lg font-bold text-slate-800 mb-4 pb-4 border-b border-slate-100 uppercase tracking-tight">Input Data</h2>
-            
+
             <div className="flex flex-col gap-4">
               {[
                 { id: 'a', label: 'a. Jumlah Tempat Tidur', placeholder: 'Ex: 100' },
@@ -231,29 +231,29 @@ export default function App() {
                 <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 uppercase">Scale 0-15</span>
               </div>
             </h2>
-            
+
             <div className="flex-1 bg-slate-50 rounded-2xl border border-slate-100 p-6 relative">
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis 
-                    type="number" 
-                    dataKey="X" 
-                    stroke="#64748b" 
+                  <XAxis
+                    type="number"
+                    dataKey="X"
+                    stroke="#64748b"
                     tick={{ fill: '#64748b', fontSize: 12, fontWeight: 700 }}
                     domain={[0, 15]}
                     label={{ value: 'TOI (Hari)', position: 'insideBottom', offset: -25, style: { fontWeight: 800, fill: '#475569' } }}
                   />
-                  <YAxis 
-                    type="number" 
-                    dataKey="Y" 
+                  <YAxis
+                    type="number"
+                    dataKey="Y"
                     stroke="#64748b"
                     tick={{ fill: '#64748b', fontSize: 12, fontWeight: 700 }}
                     domain={[0, 15]}
                     label={{ value: 'ALOS (Hari)', angle: -90, position: 'insideLeft', offset: -10, style: { fontWeight: 800, fill: '#475569' } }}
                   />
                   <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
-                  
+
                   {/* BOR GARIS BANTU (Rays) */}
                   {[50, 70, 75, 80, 90].map((val) => (
                     <Scatter
@@ -262,9 +262,9 @@ export default function App() {
                       line={{ stroke: '#cbd5e1', strokeWidth: 1.5, strokeDasharray: '3 3' }}
                       shape={() => null}
                     >
-                      <LabelList 
-                        dataKey="Y" 
-                        content={({x, y}) => (
+                      <LabelList
+                        dataKey="Y"
+                        content={({ x, y }) => (
                           <text x={x} y={y} dy={-8} dx={val > 80 ? -20 : 10} fill="#94a3b8" fontSize={9} fontWeight={800}>
                             BOR {val}%
                           </text>
@@ -275,38 +275,38 @@ export default function App() {
 
                   {/* BTO GARIS BANTU (Diagonal) */}
                   {metrics && [12.5, 15, 20, 30].map((btoVal) => (
-                     <Scatter
-                       key={`bto-line-${btoVal}`}
-                       data={getBtoLineData(btoVal, parseFloat(inputs.g) || 30)}
-                       line={{ stroke: '#e2e8f0', strokeWidth: 1 }}
-                       shape={() => null}
-                     >
-                        <LabelList 
-                          dataKey="Y" 
-                          content={({x, y}) => (
-                            <text x={x} y={y} dy={15} dx={-25} fill="#cbd5e1" fontSize={9} fontWeight={700} transform={`rotate(-45, ${x}, ${y})`}>
-                              BTO {btoVal}
-                            </text>
-                          )}
-                        />
-                     </Scatter>
+                    <Scatter
+                      key={`bto-line-${btoVal}`}
+                      data={getBtoLineData(btoVal, parseFloat(inputs.g) || 30)}
+                      line={{ stroke: '#e2e8f0', strokeWidth: 1 }}
+                      shape={() => null}
+                    >
+                      <LabelList
+                        dataKey="Y"
+                        content={({ x, y }) => (
+                          <text x={x} y={y} dy={15} dx={-25} fill="#cbd5e1" fontSize={9} fontWeight={700} transform={`rotate(-45, ${x}, ${y})`}>
+                            BTO {btoVal}
+                          </text>
+                        )}
+                      />
+                    </Scatter>
                   ))}
 
                   {/* GARIS DARI PUSAT KE TITIK VALUE */}
                   {data.map((d, index) => {
-                     if (d.INDIKATOR === 'TOI' || d.INDIKATOR === 'ALOS') return null;
-                     return (
+                    if (d.INDIKATOR === 'TOI' || d.INDIKATOR === 'ALOS') return null;
+                    return (
                       <Scatter
                         key={`origin-line-${index}`}
                         data={[{ X: 0, Y: 0 }, { X: d.X, Y: d.Y }]}
-                        line={{ 
-                          stroke: d.INDIKATOR === "TITIK RS" ? "#f43f5e" : Object.values(COLORS)[index % 4], 
+                        line={{
+                          stroke: d.INDIKATOR === "TITIK RS" ? "#f43f5e" : Object.values(COLORS)[index % 4],
                           strokeWidth: d.INDIKATOR === "TITIK RS" ? 2 : 1.5,
                           strokeDasharray: d.INDIKATOR === "TITIK RS" ? 'none' : '4 4'
                         }}
                         shape={() => null}
                       />
-                     );
+                    );
                   })}
 
                   {/* DROP LINES FOR TITIK RS */}
@@ -323,18 +323,18 @@ export default function App() {
 
                   <Scatter name="Points" data={data} fill="#6366f1">
                     {data.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.INDIKATOR === "TITIK RS" ? "#f43f5e" : Object.values(COLORS)[index % 4]} 
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.INDIKATOR === "TITIK RS" ? "#f43f5e" : Object.values(COLORS)[index % 4]}
                         r={entry.INDIKATOR === "TITIK RS" ? 8 : 4}
                         stroke={entry.INDIKATOR === "TITIK RS" ? "#fff" : "none"}
                         strokeWidth={2}
                       />
                     ))}
-                    <LabelList 
-                      dataKey="INDIKATOR" 
-                      position="top" 
-                      style={{ fill: '#475569', fontWeight: 900, fontSize: 10, textTransform: 'uppercase' }} 
+                    <LabelList
+                      dataKey="INDIKATOR"
+                      position="top"
+                      style={{ fill: '#475569', fontWeight: 900, fontSize: 10, textTransform: 'uppercase' }}
                       offset={12}
                     />
                   </Scatter>
@@ -344,7 +344,7 @@ export default function App() {
 
             {data.length > 0 && (
               <div className="mt-8 pt-6 border-t border-slate-100">
-                <button 
+                <button
                   onClick={() => setShowJson(!showJson)}
                   className="w-full flex items-center justify-between py-3 px-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group"
                 >
@@ -355,21 +355,21 @@ export default function App() {
                     </svg>
                   </div>
                 </button>
-                
+
                 {showJson && (
-                   <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                     <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-inner relative group">
-                        <button 
-                          className="absolute top-4 right-4 text-[10px] font-bold text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity uppercase"
-                          onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
-                        >
-                          Copy to clipboard
-                        </button>
-                        <pre className="text-[11px] text-indigo-300 font-mono leading-relaxed max-h-[300px] overflow-y-auto custom-scrollbar">
-                          {JSON.stringify(data, null, 2)}
-                        </pre>
-                     </div>
-                   </div>
+                  <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-inner relative group">
+                      <button
+                        className="absolute top-4 right-4 text-[10px] font-bold text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity uppercase"
+                        onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
+                      >
+                        Copy to clipboard
+                      </button>
+                      <pre className="text-[11px] text-indigo-300 font-mono leading-relaxed max-h-[300px] overflow-y-auto custom-scrollbar">
+                        {JSON.stringify(data, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
