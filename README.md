@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# Ichimoku Cloud (GBJ) Charting Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
+This document provides comprehensive step-by-step instructions for building an Ichimoku Cloud (GBJ) charting application.
 
-Currently, two official plugins are available:
+## Prerequisites
+Before starting, ensure you have the following installed:
+- Node.js (v14 or later)
+- npm (Node package manager)
+- A code editor (e.g., Visual Studio Code)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Step 1: Clone the Repository
+Open your terminal and clone the repository using the following command:
+```bash
+git clone https://github.com/echolist/simple-gbj.git
+cd simple-gbj
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Step 2: Install Dependencies
+Navigate to the project directory and install the necessary dependencies:
+```bash
+npm install
 ```
+
+## Step 3: Configure API Keys
+In the project's root directory, create a `.env` file and add your API keys:
+```plaintext
+API_KEY=your_api_key_here
+OTHER_CONFIG=your_other_config_here
+```
+
+## Step 4: Run the Application
+To start the application, run:
+```bash
+npm start
+```
+
+## Step 5: Access the Application
+Open your web browser and go to `http://localhost:3000` to access the Ichimoku Cloud charting application.
+
+## Additional Resources
+- [Ichimoku Cloud Explanation](https://www.investopedia.com/terms/i/ichimoku-cloud.asp)
+- [Repository Documentation](https://github.com/echolist/simple-gbj)
+
+## Conclusion
+With these steps, you should be able to build and run your Ichimoku Cloud (GBJ) charting application successfully. If you encounter any issues, please refer to the additional resources or open an issue in the repository.
