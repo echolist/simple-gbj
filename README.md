@@ -45,26 +45,20 @@ npm run build
 ## 📊 Cara Kerja Program
 ### Input Data
 Aplikasi meminta 7 parameter input:
+<ol type="a">
+  <li>Jumlah Tempat Tidur (Bed Capacity)<br>Jumlah total tempat tidur yang tersedia di unit perawatan</li>
+<li>Pasien Keluar Hidup (Discharged Alive)<br>
+Jumlah pasien yang keluar dalam kondisi hidup</li>
+<li>Pasien Keluar Mati < 48 Jam (Died < 48 Hours)<br>Jumlah pasien yang meninggal dalam waktu kurang dari 48 jam setelah masuk</li>
+<li>Pasien Keluar Mati > 48 Jam (Died > 48 Hours)<br>
+Jumlah pasien yang meninggal setelah lebih dari 48 jam perawatan</li>
 
-a Jumlah Tempat Tidur (Bed Capacity)
-Jumlah total tempat tidur yang tersedia di unit perawatan
+<li>Jumlah Hari Perawatan (Total Days of Care)<br>Total hari pasien dirawat dalam periode tertentu</li>
 
-b Pasien Keluar Hidup (Discharged Alive)
-Jumlah pasien yang keluar dalam kondisi hidup
+<li>Lama Dirawat (Length of Stay)<br>Total hari rawat inap dari semua pasien</li>
 
-c Pasien Keluar Mati < 48 Jam (Died < 48 Hours)
-Jumlah pasien yang meninggal dalam waktu kurang dari 48 jam setelah masuk
+<li>Periode (Period in Days)<br>Jumlah hari dalam periode observasi (biasanya 30 hari)</li></ol>
 
-d Pasien Keluar Mati > 48 Jam (Died > 48 Hours)
-Jumlah pasien yang meninggal setelah lebih dari 48 jam perawatan
-e Jumlah Hari Perawatan (Total Days of Care)
-Total hari pasien dirawat dalam periode tertentu
-
-f Lama Dirawat (Length of Stay)
-Total hari rawat inap dari semua pasien
-
-g Periode (Period in Days)
-Jumlah hari dalam periode observasi (biasanya 30 hari)
 ### Perhitungan Indikator
 Program menghitung 4 indikator utama:
 
@@ -91,42 +85,42 @@ Menunjukkan produktivitas tempat tidur
 ### Visualisasi Grafik
 Setelah input data dan klik "GENERATE GRAFIK", aplikasi akan menampilkan:
 
-Scatter Chart dengan sumbu X (TOI) dan Y (ALOS)
-Garis Bantu BOR - Ray dari origin dengan nilai BOR 50%, 70%, 75%, 80%, 90%
-Garis Bantu BTO - Diagonal dengan nilai BTO 12.5, 15, 20, 30
-Titik RS - Posisi rumah sakit Anda berdasarkan TOI dan ALOS
-Garis Drop - Garis vertikal dan horizontal dari titik RS untuk memudahkan pembacaan
-Output dan Ekspor
-Hasil Perhitungan: Menampilkan nilai BOR (%), ALOS, TOI, dan BTO
-Data JSON: Menampilkan semua data dalam format JSON yang dapat di-copy
-Download Grafik: Tombol untuk mengunduh grafik sebagai file PNG
+1. Scatter Chart dengan sumbu X (TOI) dan Y (ALOS)
+2. Garis Bantu BOR - Ray dari origin dengan nilai BOR 50%, 70%, 75%, 80%, 90%
+3. Garis Bantu BTO - Diagonal dengan nilai BTO 12.5, 15, 20, 30
+4. Titik RS - Posisi rumah sakit Anda berdasarkan TOI dan ALOS
+5. Garis Drop - Garis vertikal dan horizontal dari titik RS untuk memudahkan pembacaan
+### Output dan Ekspor
+- Hasil Perhitungan: Menampilkan nilai BOR (%), ALOS, TOI, dan BTO
+- Data JSON: Menampilkan semua data dalam format JSON yang dapat di-copy
+- Download Grafik: Tombol untuk mengunduh grafik sebagai file PNG
 ## 📈 Interpretasi Hasil
-Posisi Ideal Rumah Sakit di Grafik Barber Johnson
-Kuadran Optimal: TOI = 1-3 hari, ALOS = 3-12 hari
-Semakin dekat ke origin (0,0) dengan TOI rendah dan ALOS moderat = efisiensi tinggi
-Hindari: TOI terlalu tinggi (tempat tidur kosong lama) atau ALOS terlalu tinggi (pasien rawat terlalu lama)
+- Posisi Ideal Rumah Sakit di Grafik Barber Johnson
+- Kuadran Optimal: TOI = 1-3 hari, ALOS = 3-12 hari
+- Semakin dekat ke origin (0,0) dengan TOI rendah dan ALOS moderat = efisiensi tinggi
+- Hindari: TOI terlalu tinggi (tempat tidur kosong lama) atau ALOS terlalu tinggi (pasien rawat terlalu lama)
 ## 🛠️ Teknologi yang Digunakan
-React 18 - Framework UI
-TypeScript - Type-safe JavaScript
-Recharts - Library untuk visualisasi grafik
-Tailwind CSS - Styling
-Vite - Build tool
-Lucide React - Icon library
+- React 18 - Framework UI
+- TypeScript - Type-safe JavaScript
+- Recharts - Library untuk visualisasi grafik
+- Tailwind CSS - Styling
+- Vite - Build tool
+- Lucide React - Icon library
 ## 📝 Contoh Penggunaan
 ### Skenario:
 Rumah sakit dengan 100 tempat tidur dalam periode 30 hari:
 
-Pasien Keluar Hidup: 450
-Pasien Keluar Mati < 48 Jam: 5
-Pasien Keluar Mati > 48 Jam: 10
-Jumlah Hari Perawatan: 2,100
-Lama Dirawat: 2,100
-Periode: 30 hari
-Hasil Perhitungan:
-BOR = (2,100 / (100 × 30)) × 100% = 70%
-ALOS = 2,100 / (450 + 5 + 10) = 4.29 hari
-TOI = ((100 × 30) - 2,100) / (450 + 5 + 10) = 1.37 hari
-BTO = (450 + 5 + 10) / 100 = 4.65 pasien per tempat tidur
+- Pasien Keluar Hidup: 450
+- Pasien Keluar Mati < 48 Jam: 5
+- Pasien Keluar Mati > 48 Jam: 10
+- Jumlah Hari Perawatan: 2,100
+- Lama Dirawat: 2,100
+- Periode: 30 hari
+- Hasil Perhitungan:
+- BOR = (2,100 / (100 × 30)) × 100% = 70%
+- ALOS = 2,100 / (450 + 5 + 10) = 4.29 hari
+- TOI = ((100 × 30) - 2,100) / (450 + 5 + 10) = 1.37 hari
+- BTO = (450 + 5 + 10) / 100 = 4.65 pasien per tempat tidur
 ## 🐛 Troubleshooting
 ### Port sudah digunakan
 Jika port 5173 sudah terpakai, jalankan:
