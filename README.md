@@ -1,46 +1,157 @@
-# Ichimoku Cloud (GBJ) Charting Application
+# SIDIET-BARBER - Sistem Informasi Digital Efisiensi Tempat Tidur Berdasarkan Ebarber
 
-## Introduction
-This document provides comprehensive step-by-step instructions for building an Ichimoku Cloud (GBJ) charting application.
+## 📋 Pengenalan
 
-## Prerequisites
-Before starting, ensure you have the following installed:
-- Node.js (v14 or later)
-- npm (Node package manager)
-- A code editor (e.g., Visual Studio Code)
+SIDIET-BARBER adalah aplikasi web untuk menganalisis efisiensi penggunaan tempat tidur di rumah sakit menggunakan metode Barber Johnson. Aplikasi ini memvisualisasikan empat indikator utama (BOR, ALOS, TOI, BTO) dalam grafik scatter yang interaktif.
 
-## Step 1: Clone the Repository
-Open your terminal and clone the repository using the following command:
+## 📋 Prasyarat
+
+Sebelum memulai, pastikan Anda telah menginstal:
+- Node.js (v14 atau lebih baru)
+- npm (Node Package Manager)
+- Git
+- Code editor (Visual Studio Code disarankan)
+
+## 🚀 Cara Install
+
+### Langkah 1: Clone Repository
+Buka terminal dan jalankan perintah berikut:
 ```bash
 git clone https://github.com/echolist/simple-gbj.git
 cd simple-gbj
 ```
+### Langkah 2: Install Dependencies
+Instal semua dependensi yang diperlukan:
 
-## Step 2: Install Dependencies
-Navigate to the project directory and install the necessary dependencies:
 ```bash
 npm install
 ```
+### Langkah 3: Menjalankan Aplikasi
 
-## Step 3: Configure API Keys
-In the project's root directory, create a `.env` file and add your API keys:
-```plaintext
-API_KEY=your_api_key_here
-OTHER_CONFIG=your_other_config_here
-```
+Untuk menjalankan aplikasi dalam mode development:
 
-## Step 4: Run the Application
-To start the application, run:
 ```bash
-npm start
+npm run dev
 ```
 
-## Step 5: Access the Application
-Open your web browser and go to `http://localhost:3000` to access the Ichimoku Cloud charting application.
+Aplikasi akan berjalan di http://localhost:5173 (atau port yang ditampilkan di terminal)
 
-## Additional Resources
-- [Ichimoku Cloud Explanation](https://www.investopedia.com/terms/i/ichimoku-cloud.asp)
-- [Repository Documentation](https://github.com/echolist/simple-gbj)
+### Langkah 4: Build untuk Production
+Untuk membuat build production:
 
-## Conclusion
-With these steps, you should be able to build and run your Ichimoku Cloud (GBJ) charting application successfully. If you encounter any issues, please refer to the additional resources or open an issue in the repository.
+```bash
+npm run build
+```
+## 📊 Cara Kerja Program
+### Input Data
+Aplikasi meminta 7 parameter input:
+
+a Jumlah Tempat Tidur (Bed Capacity)
+Jumlah total tempat tidur yang tersedia di unit perawatan
+
+b Pasien Keluar Hidup (Discharged Alive)
+Jumlah pasien yang keluar dalam kondisi hidup
+
+c Pasien Keluar Mati < 48 Jam (Died < 48 Hours)
+Jumlah pasien yang meninggal dalam waktu kurang dari 48 jam setelah masuk
+
+d Pasien Keluar Mati > 48 Jam (Died > 48 Hours)
+Jumlah pasien yang meninggal setelah lebih dari 48 jam perawatan
+e Jumlah Hari Perawatan (Total Days of Care)
+Total hari pasien dirawat dalam periode tertentu
+
+f Lama Dirawat (Length of Stay)
+Total hari rawat inap dari semua pasien
+
+g Periode (Period in Days)
+Jumlah hari dalam periode observasi (biasanya 30 hari)
+### Perhitungan Indikator
+Program menghitung 4 indikator utama:
+
+1. BOR (Bed Occupancy Rate) - Persentase Okupansi Tempat Tidur
+Code
+BOR = (Jumlah Hari Perawatan / (Jumlah Tempat Tidur × Periode)) × 100%
+Target ideal: 75-85%
+Menunjukkan persentase pemanfaatan tempat tidur
+2. ALOS (Average Length of Stay) - Rata-rata Lama Rawat Inap
+Code
+ALOS = Lama Dirawat / (Pasien Keluar Hidup + Pasien Keluar Mati)
+Target ideal: 3-12 hari (tergantung jenis rumah sakit)
+Semakin rendah semakin efisien
+3. TOI (Turn Over Interval) - Interval Pergantian Tempat Tidur
+Code
+TOI = ((Jumlah Tempat Tidur × Periode) - Jumlah Hari Perawatan) / Total Pasien Keluar
+Target ideal: 1-3 hari
+Waktu rata-rata tempat tidur kosong sebelum pasien baru masuk
+4. BTO (Bed Turn Over) - Pergantian Pasien per Tempat Tidur
+Code
+BTO = Total Pasien Keluar / Jumlah Tempat Tidur
+Target ideal: 40-50 pasien per tempat tidur per tahun
+Menunjukkan produktivitas tempat tidur
+### Visualisasi Grafik
+Setelah input data dan klik "GENERATE GRAFIK", aplikasi akan menampilkan:
+
+Scatter Chart dengan sumbu X (TOI) dan Y (ALOS)
+Garis Bantu BOR - Ray dari origin dengan nilai BOR 50%, 70%, 75%, 80%, 90%
+Garis Bantu BTO - Diagonal dengan nilai BTO 12.5, 15, 20, 30
+Titik RS - Posisi rumah sakit Anda berdasarkan TOI dan ALOS
+Garis Drop - Garis vertikal dan horizontal dari titik RS untuk memudahkan pembacaan
+Output dan Ekspor
+Hasil Perhitungan: Menampilkan nilai BOR (%), ALOS, TOI, dan BTO
+Data JSON: Menampilkan semua data dalam format JSON yang dapat di-copy
+Download Grafik: Tombol untuk mengunduh grafik sebagai file PNG
+## 📈 Interpretasi Hasil
+Posisi Ideal Rumah Sakit di Grafik Barber Johnson
+Kuadran Optimal: TOI = 1-3 hari, ALOS = 3-12 hari
+Semakin dekat ke origin (0,0) dengan TOI rendah dan ALOS moderat = efisiensi tinggi
+Hindari: TOI terlalu tinggi (tempat tidur kosong lama) atau ALOS terlalu tinggi (pasien rawat terlalu lama)
+## 🛠️ Teknologi yang Digunakan
+React 18 - Framework UI
+TypeScript - Type-safe JavaScript
+Recharts - Library untuk visualisasi grafik
+Tailwind CSS - Styling
+Vite - Build tool
+Lucide React - Icon library
+## 📝 Contoh Penggunaan
+### Skenario:
+Rumah sakit dengan 100 tempat tidur dalam periode 30 hari:
+
+Pasien Keluar Hidup: 450
+Pasien Keluar Mati < 48 Jam: 5
+Pasien Keluar Mati > 48 Jam: 10
+Jumlah Hari Perawatan: 2,100
+Lama Dirawat: 2,100
+Periode: 30 hari
+Hasil Perhitungan:
+BOR = (2,100 / (100 × 30)) × 100% = 70%
+ALOS = 2,100 / (450 + 5 + 10) = 4.29 hari
+TOI = ((100 × 30) - 2,100) / (450 + 5 + 10) = 1.37 hari
+BTO = (450 + 5 + 10) / 100 = 4.65 pasien per tempat tidur
+## 🐛 Troubleshooting
+### Port sudah digunakan
+Jika port 5173 sudah terpakai, jalankan:
+
+```bash
+npm run dev -- --port 3000
+```
+### Error saat install dependencies
+Coba hapus node_modules dan package-lock.json, lalu install ulang:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Grafik tidak muncul
+Pastikan semua 7 parameter input sudah diisi dengan nilai yang valid dan klik "GENERATE GRAFIK"
+
+## 📞 Kontak & Dukungan
+Jika menemukan bug atau memiliki saran, silakan buka Issue di repository ini
+
+## 📄 Lisensi
+Project ini bersifat open source dan dapat digunakan sesuai kebutuhan
+
+## 🔗 Referensi
+[Metode Barber Johnson](https://en.wikipedia.org/wiki/Barber_Johnson_method)
+
+[Panduan Efisiensi Tempat Tidur Rumah Sakit](https://www.depkes.go.id/)
