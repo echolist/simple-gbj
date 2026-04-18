@@ -189,7 +189,7 @@ export default function App() {
           <Activity className="w-8 h-8 text-white" />
         </div>
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 font-sans">SIDET-BARBER</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 font-sans">SIDIET-BARBER</h1>
           <p className="text-slate-500 font-medium">Sistem Informasi Digital Efisiensi Tempat Tidur Berdasarkan Ebarber</p>
         </div>
       </div>
